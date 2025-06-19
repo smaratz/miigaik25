@@ -1,0 +1,27 @@
+import networkx as nx
+
+G = nx.Graph()
+G.add_nodes_from(range(15))
+#1 этап "яма" (0 → 4)
+for i in range(4):
+    G.add_edge(i, i+1)  # 0-1, 1-2, ..., 3-4
+G.remove_edge(3, 4)
+G.add_edge(4, 5)
+
+# 2 этап "подъём" (5 → 8)
+for i in range(5, 8):
+    G.add_edge(i, i+1)  # 5-6, 6-7, 7-8, 8-9
+# Делаем узел 8 самым центральным
+G.add_edge(8, 6)
+G.add_edge(8, 7)
+G.add_edge(8, 9)
+# 3 этап падение  (9 → 15)
+for i in range(9, 15):
+    G.add_edge(i, i+1)  # 9-10, ..., 14-15
+
+# Вычисляем центральность
+centrality = nx.eigenvector_centrality(G, max_iter=1000)
+sorted_values = [centrality[i] for i in range(15)]
+
+# Выводим значения на экран
+print("Централизация узлов:", sorted_values)
